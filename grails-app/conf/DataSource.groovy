@@ -25,6 +25,9 @@ environments {
     }
     production {
         dataSource {
+            username = "qfbvfuaczaxhsq"
+            password = "gjPkO8aN4MBRjPDEl1euNPCnTf"
+
             dbCreate = "create-drop"
             driverClassName = "org.postgresql.Driver"
             dialect = org.hibernate.dialect.PostgreSQLDialect
