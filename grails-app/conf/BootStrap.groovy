@@ -1,5 +1,6 @@
 import clinicmanager.Clinic
 import clinicmanager.Medication
+import clinicmanager.StockedMedicine
 
 class BootStrap {
 
@@ -14,9 +15,17 @@ class BootStrap {
         //Create clinics if none are defined
         if(Clinic.getAll().size() < 1){
             for(int i = 1; i < 11; i++){
-                Clinic clin = new Clinic(title: "Clinic-${i}").save()
+                Clinic clin = new Clinic(title: "Clinic-${i}", country: "South Africa").save()
+            }
+
+            //add stocks
+            Clinic.getAll().each {
+                it.addToMedication(new StockedMedicine(medication: Medication.findById(1), quantity: 10)).save()
+                it.addToMedication(new StockedMedicine(medication: Medication.findById(2), quantity: 10)).save()
+                it.addToMedication(new StockedMedicine(medication: Medication.findById(3), quantity: 10)).save()
             }
         }
+
     }
     def destroy = {
     }

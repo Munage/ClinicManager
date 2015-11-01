@@ -21,9 +21,17 @@
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
+
+            <g:if test="${clinicInstance.country}">
+                <ul class="property-list clinic">
+                    <li>Country: ${clinicInstance?.country}</li>
+                </ul>
+            </g:if>
+
+
 			<ol class="property-list clinic">
 				<g:if test="${sortedMedication}">
-                        <table style="border: none;">
+                        <table>
                             <thead>
                                 <tr>
                                     <td>Medication</td>
