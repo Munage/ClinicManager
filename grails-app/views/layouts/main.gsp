@@ -18,7 +18,11 @@
 		<r:layoutResources />
 	</head>
 	<body>
-		<div id="grailsLogo" role="banner"><g:link controller="clinic" action="list"><img src="/images/green_cross.jpg" alt="Grails"/></g:link></div>
+		<div id="grailsLogo" role="banner">
+            <g:link controller="clinic" action="list">
+                <img src="/images/green_cross.jpg" alt="Grails"/>
+            </g:link>
+        </div>
 		<g:layoutBody/>
 		<div class="footer" role="contentinfo"></div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
