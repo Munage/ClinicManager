@@ -14,7 +14,7 @@ class ClinicController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        List<Clinic> lowStocks = stockService.getLowStockClinics()
+        List<Clinic> lowStocks = stockService.getLowStockWarnings()
 
         [clinicInstanceList: Clinic.list(params), clinicInstanceTotal: Clinic.count(), lowStocks:lowStocks]
     }

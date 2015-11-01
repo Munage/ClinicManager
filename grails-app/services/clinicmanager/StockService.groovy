@@ -5,12 +5,12 @@ class StockService {
     private final int LOW_LEVEL = 5 //Low stock threshold
 
     /**
-     * Checks the stock levels of medication and returns a list of clinics if stock levels are low.
+     * Checks the stock levels of medication and returns a list of clinics with warnings if stock levels are low.
      * @param inStock
      * @return
      */
-    List getLowStockClinics(){
-        def clinics = Clinic.getAll()
+    List getLowStockWarnings(){
+        def clinics = getLowStockClinics()
         Set warnings = []
         clinics.each {
             //Check if the stock level is low
@@ -23,6 +23,30 @@ class StockService {
 
         //Convert to list and sort
         List response = warnings.toList()
+        response.sort { it.id }
+
+        return response
+    }
+
+    /**
+     * Returns a list of clinics with low stock levels
+     * @return
+     */
+    List getLowStockClinics(){
+        def clinics = Clinic.getAll()
+
+        Set lowClinics = []
+        clinics.each {
+            //Check if the stock level is low
+            it.medication.each { stock ->
+                if(stock.quantity < LOW_LEVEL){
+                    lowClinics.add(it)
+                }
+            }
+        }
+
+        //Convert to list and sort
+        List response = lowClinics.toList()
         response.sort { it.id }
 
         return response
@@ -51,40 +75,41 @@ class StockService {
     }
 
     /**
-     *
+     * Returns a list of clinics and their stock levels
+     * @param lowOnly
      * @return
      */
-    def getAllStockLevels(){
-        return StockedMedicine.getAll()
-    }
+    def getStockLevels(boolean lowOnly){
+        def clinics
+        if(lowOnly){
+            clinics = getLowStockClinics()
+        } else {
+            clinics= Clinic.getAll()
+        }
 
-    /**
-     *
-     * @param clinicId
-     * @return
-     */
-    def getStockLevel(Long clinicId) {
-        Clinic clinic = Clinic.findById(clinicId)
-        return clinic.getMedication()
-    }
+        def stocks = []
 
-    /**
-     *
-     * @param clinicId
-     * @return
-     */
-    def getStockLevel(List clinicIds) {
-        Clinic clinic = Clinic.findById(clinicId)
-        return clinic.getMedication()
-    }
-    /**
-     *
-     * @param clinicId
-     * @param medicationId
-     * @return
-     */
-    int getStockLevel(Long clinicId, Long medicationId) {
-        Clinic clinic = Clinic.findById(clinicId)
-        return clinic.medication.each { if(it.id == medicationId) return it.quantity }
+
+        clinics.each {
+            def report = [:]
+            report.put("clinic", it.title)
+            it.medication.each {
+                if(it.medication.title == "Nevirapine"){
+                    report.put("Nevirapine", it.quantity)
+                }
+
+                if(it.medication.title == "Stavudine"){
+                    report.put("Stavudine", it.quantity)
+                }
+
+                if(it.medication.title == "Zidotabine"){
+                    report.put("Zidotabine", it.quantity)
+                }
+            }
+
+            stocks.add(report)
+        }
+
+        return stocks
     }
 }
