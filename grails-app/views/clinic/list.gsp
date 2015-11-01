@@ -20,6 +20,13 @@
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
+
+            <g:each in="${lowStocks}">
+                <g:link controller="clinic" action="show" params="[id:it.id]">
+                    <div class="message" role="status">${it.title} has low stock and needs to be attended to</div>
+                </g:link>
+            </g:each>
+
 			<table>
 				<thead>
 					<tr>

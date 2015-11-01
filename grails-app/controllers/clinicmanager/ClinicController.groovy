@@ -4,6 +4,8 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class ClinicController {
 
+    def stockService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -12,7 +14,9 @@ class ClinicController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [clinicInstanceList: Clinic.list(params), clinicInstanceTotal: Clinic.count()]
+        List<Clinic> lowStocks = stockService.getLowStockClinics()
+
+        [clinicInstanceList: Clinic.list(params), clinicInstanceTotal: Clinic.count(), lowStocks:lowStocks]
     }
 
     def create() {
@@ -40,7 +44,10 @@ class ClinicController {
 
         //Create a sorted list so medication always appear in the same order
         List sortedMedication = clinicInstance.medication.toList().sort { it.medication.title }
-        [clinicInstance: clinicInstance, sortedMedication:sortedMedication]
+
+        List warnings = stockService.checkStockLevels(sortedMedication)
+
+        [clinicInstance: clinicInstance, sortedMedication:sortedMedication, warnings:warnings]
     }
 
     def edit(Long id) {

@@ -22,6 +22,12 @@
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
 
+            <g:each in="${warnings}">
+                <div class="${it.style}" role="status">
+                    ${it.message}
+                </div>
+            </g:each>
+
             <g:if test="${clinicInstance.country}">
                 <ul class="property-list clinic">
                     <li>Country: ${clinicInstance?.country}</li>
